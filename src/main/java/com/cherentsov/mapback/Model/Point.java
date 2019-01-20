@@ -33,11 +33,13 @@ public class Point implements Serializable {
     public Point() {
     }
 
-    public Point(Long id, String address, Float fX, Float fY) {
+    public Point(Long id, String address, Float fX, Float fY, City city, Bank bank) {
         this.id = id;
         this.address = address;
         this.fX = fX;
         this.fY = fY;
+        this.city = city;
+        this.bank = bank;
     }
 
     public Long getId() {

@@ -26,6 +26,6 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    runtime files('lib/ojdbc6.jar')
+    //runtime files('lib/ojdbc6.jar')
     //Compile('libs/OJDBC-Full_11g_r2')
 }
