@@ -9,28 +9,18 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
-import org.hibernate.internal.SessionFactoryImpl;
 import org.hibernate.service.ServiceRegistry;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.PropertySource;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.Locale;
-import java.util.Properties;
 
-public class DBService<T> implements IDBService<T> {
+public class DBService implements IDBService {
     private final SessionFactory sessionFactory;
 
-    private DBConfig dBConfig;
+    /*private DBConfig dBConfig;
 
     public void setDbConfig(DBConfig dbConfig) {
         this.dBConfig = dbConfig;
-    }
+    }*/
 
     public DBService() {
         Configuration configuration = getOracleConfiguration();
@@ -43,9 +33,9 @@ public class DBService<T> implements IDBService<T> {
     }
 
     private Configuration getOracleConfiguration() {
-        //System.out.println(DBConfig.getInstance().toString());
+        System.out.println(DBConfig.getInstance().toString());
         //DBConfig dBConfig = new DBConfig();
-        //System.out.println("Dialect: "+ dBConfig.getInstance().getDialect() + "Dialect: "+ dBConfig.getInstance().getDriver_class()
+        //System.out.println(" Dialect: "+ dBConfig.getInstance().getDialect() + "Dialect: "+ dBConfig.getInstance().getDriver_class()
         //        + "Dialect: "+ dBConfig.getInstance().getHbm2ddl() + "Dialect: "+ dBConfig.getInstance().getPassword()+"Dialect: "+
         //        dBConfig.getInstance().getShow_sql()+"Dialect: "+ dBConfig.getInstance().getUrl()+"Dialect: "+ dBConfig.getInstance().getUsername());
 
@@ -80,13 +70,13 @@ public class DBService<T> implements IDBService<T> {
         configuration.addAnnotatedClass(Bank.class);
         configuration.addAnnotatedClass(Point.class);
 
-        configuration.setProperty("hibernate.dialect", dBConfig.getInstance().getDialect());
-        configuration.setProperty("hibernate.connection.driver_class", dBConfig.getInstance().getDriver_class());
-        configuration.setProperty("hibernate.connection.url", dBConfig.getInstance().getUrl());
-        configuration.setProperty("hibernate.connection.username", dBConfig.getInstance().getUsername());
-        configuration.setProperty("hibernate.connection.password", dBConfig.getInstance().getPassword());
-        configuration.setProperty("hibernate.show_sql", dBConfig.getInstance().getShow_sql());
-        configuration.setProperty("hibernate.hbm2ddl.auto", dBConfig.getInstance().getHbm2ddl());
+        configuration.setProperty("hibernate.dialect", DBConfig.getInstance().getDialect());
+        configuration.setProperty("hibernate.connection.driver_class", DBConfig.getInstance().getDriver_class());
+        configuration.setProperty("hibernate.connection.url", DBConfig.getInstance().getUrl());
+        configuration.setProperty("hibernate.connection.username", DBConfig.getInstance().getUsername());
+        configuration.setProperty("hibernate.connection.password", DBConfig.getInstance().getPassword());
+        configuration.setProperty("hibernate.show_sql", DBConfig.getInstance().getShow_sql());
+        configuration.setProperty("hibernate.hbm2ddl.auto", DBConfig.getInstance().getHbm2ddl());
         //configuration.setProperty("NLS_LANG", "AMERICAN");
         return configuration;
     }
@@ -97,7 +87,7 @@ public class DBService<T> implements IDBService<T> {
         ServiceRegistry serviceRegistry = builder.build();
         return configuration.buildSessionFactory(serviceRegistry);
     }
-
+/*
     public long addCountry(Country country) throws HibernateException {
         try {
             Session session = sessionFactory.openSession();
@@ -111,12 +101,13 @@ public class DBService<T> implements IDBService<T> {
             throw new HibernateException(e);
         }
     }
-
-    public Long create(final T entity) throws HibernateException {
+*/
+    @Override
+    public <T> Long create(T entity) throws HibernateException {
         try {
             Session session = sessionFactory.openSession();
             Transaction transaction = session.beginTransaction();
-            IGenericDAO dao = new GenericDAO(session);
+            IGenericDAO<T> dao = new GenericDAO<>(session);
             Long id = dao.create(entity);
             transaction.commit();
             session.close();

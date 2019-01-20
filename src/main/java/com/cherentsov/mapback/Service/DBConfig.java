@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
-@Configuration
+///@Configuration///
 @PropertySource("application.properties")
 @Component
 public class DBConfig {
@@ -22,7 +22,7 @@ public class DBConfig {
 
     private static DBConfig instance;
 
-    public static synchronized DBConfig getInstance() {
+    static synchronized DBConfig getInstance() {
         if (instance == null) {
             instance = new DBConfig();
         }
@@ -64,31 +64,31 @@ public class DBConfig {
         DBConfig.getInstance().hbm2ddl = value;
     }
 
-    public String getDialect() {
+    String getDialect() {
         return dialect;
     }
 
-    public String getDriver_class() {
+    String getDriver_class() {
         return driver_class;
     }
 
-    public String getUrl() {
+    String getUrl() {
         return url;
     }
 
-    public String getUsername() {
+    String getUsername() {
         return username;
     }
 
-    public String getPassword() {
+    String getPassword() {
         return password;
     }
 
-    public String getShow_sql() {
+    String getShow_sql() {
         return show_sql;
     }
 
-    public String getHbm2ddl() {
+    String getHbm2ddl() {
         return hbm2ddl;
     }
 

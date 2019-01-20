@@ -2,8 +2,6 @@ package com.cherentsov.mapback.Dao;
 
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 
 public class GenericDAO<T> implements IGenericDAO<T> {
 
