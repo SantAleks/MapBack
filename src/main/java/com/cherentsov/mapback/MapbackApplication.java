@@ -10,10 +10,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class MapbackApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(MapbackApplication.class, args);
+        //SpringApplication.run(MapbackApplication.class, args);
         DBService dbService = new DBService();
+        System.out.println("fdgfg");
         try {
-            long countryId = dbService.create(new Country(Long.valueOf(-1), "Российская Федирация"));
+            long countryId = dbService.create(new Country(Long.valueOf(-1), "Российская Федерация"));
             System.out.println("Added country id: " + countryId);
        } catch (HibernateException e) {
             e.printStackTrace();

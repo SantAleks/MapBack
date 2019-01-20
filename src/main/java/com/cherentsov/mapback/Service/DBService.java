@@ -14,6 +14,7 @@ import org.hibernate.service.ServiceRegistry;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Locale;
 
 public class DBService<T> implements IDBService<T> {
     private final SessionFactory sessionFactory;
@@ -29,6 +30,7 @@ public class DBService<T> implements IDBService<T> {
     }
 
     private Configuration getOracleConfiguration() {
+        Locale.setDefault(Locale.US);
         Configuration configuration = new Configuration();
         configuration.addAnnotatedClass(Country.class);
         configuration.addAnnotatedClass(City.class);
@@ -42,6 +44,7 @@ public class DBService<T> implements IDBService<T> {
         configuration.setProperty("hibernate.connection.password", "ogabbygabby");
         configuration.setProperty("hibernate.show_sql", "true");
         configuration.setProperty("hibernate.hbm2ddl.auto", "create");
+        //configuration.setProperty("NLS_LANG", "AMERICAN");
         return configuration;
     }
 
