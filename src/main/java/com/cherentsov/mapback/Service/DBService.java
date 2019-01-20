@@ -11,7 +11,9 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.internal.SessionFactoryImpl;
 import org.hibernate.service.ServiceRegistry;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.PropertySource;
 
 import java.io.FileInputStream;
@@ -24,6 +26,12 @@ import java.util.Properties;
 public class DBService<T> implements IDBService<T> {
     private final SessionFactory sessionFactory;
 
+    private DBConfig dBConfig;
+
+    public void setDbConfig(DBConfig dbConfig) {
+        this.dBConfig = dbConfig;
+    }
+
     public DBService() {
         Configuration configuration = getOracleConfiguration();
         sessionFactory = createSessionFactory(configuration);
@@ -35,7 +43,13 @@ public class DBService<T> implements IDBService<T> {
     }
 
     private Configuration getOracleConfiguration() {
+        //System.out.println(DBConfig.getInstance().toString());
+        //DBConfig dBConfig = new DBConfig();
+        //System.out.println("Dialect: "+ dBConfig.getInstance().getDialect() + "Dialect: "+ dBConfig.getInstance().getDriver_class()
+        //        + "Dialect: "+ dBConfig.getInstance().getHbm2ddl() + "Dialect: "+ dBConfig.getInstance().getPassword()+"Dialect: "+
+        //        dBConfig.getInstance().getShow_sql()+"Dialect: "+ dBConfig.getInstance().getUrl()+"Dialect: "+ dBConfig.getInstance().getUsername());
 
+        /*
         FileInputStream fis;
         Properties property = new Properties();
 
@@ -57,7 +71,7 @@ public class DBService<T> implements IDBService<T> {
                 + ", LOGIN: " + login
                 + ", PASSWORD: " + password);
 
-
+*/
 
         Locale.setDefault(Locale.US);
         Configuration configuration = new Configuration();
@@ -66,13 +80,13 @@ public class DBService<T> implements IDBService<T> {
         configuration.addAnnotatedClass(Bank.class);
         configuration.addAnnotatedClass(Point.class);
 
-        configuration.setProperty("hibernate.dialect", "org.hibernate.dialect.Oracle10gDialect");
-        configuration.setProperty("hibernate.connection.driver_class", "oracle.jdbc.OracleDriver");
-        configuration.setProperty("hibernate.connection.url", "jdbc:oracle:thin:@localhost:1521:XE");
-        configuration.setProperty("hibernate.connection.username", "system");
-        configuration.setProperty("hibernate.connection.password", "ogabbygabby");
-        configuration.setProperty("hibernate.show_sql", "true");
-        configuration.setProperty("hibernate.hbm2ddl.auto", "create");
+        configuration.setProperty("hibernate.dialect", dBConfig.getInstance().getDialect());
+        configuration.setProperty("hibernate.connection.driver_class", dBConfig.getInstance().getDriver_class());
+        configuration.setProperty("hibernate.connection.url", dBConfig.getInstance().getUrl());
+        configuration.setProperty("hibernate.connection.username", dBConfig.getInstance().getUsername());
+        configuration.setProperty("hibernate.connection.password", dBConfig.getInstance().getPassword());
+        configuration.setProperty("hibernate.show_sql", dBConfig.getInstance().getShow_sql());
+        configuration.setProperty("hibernate.hbm2ddl.auto", dBConfig.getInstance().getHbm2ddl());
         //configuration.setProperty("NLS_LANG", "AMERICAN");
         return configuration;
     }
