@@ -6,7 +6,7 @@ import org.hibernate.HibernateException;
 
 public class ExampleData {
 //Наполнение БД тестовыми данными
-    public static void AddExampleToBD(DBService dbService) {
+    public static void AddExampleToDB(DBService dbService) {
         Country RF = new Country(Long.valueOf(-1), "Российская Федерация");
         Country KZ = new Country(Long.valueOf(-1), "Казахстан");
         Country Gr = new Country(Long.valueOf(-1), "Грузия");

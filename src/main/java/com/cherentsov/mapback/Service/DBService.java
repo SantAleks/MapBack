@@ -11,10 +11,15 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.internal.SessionFactoryImpl;
 import org.hibernate.service.ServiceRegistry;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Locale;
+import java.util.Properties;
 
 public class DBService<T> implements IDBService<T> {
     private final SessionFactory sessionFactory;
@@ -30,6 +35,30 @@ public class DBService<T> implements IDBService<T> {
     }
 
     private Configuration getOracleConfiguration() {
+
+        FileInputStream fis;
+        Properties property = new Properties();
+
+        String host = "";
+        String login = "";
+        String password = "";
+        try {
+            fis = new FileInputStream("G:\\java\\MapBack\\src\\main\\resources\\application.properties");
+            property.load(fis);
+            host = property.getProperty("db.host");
+            login = property.getProperty("hibernate.connection.username");
+            password = property.getProperty("hibernate.connection.password");
+
+        } catch (IOException e) {
+            System.err.println("ОШИБКА: Файл свойств отсуствует!");
+        }
+
+        System.out.println("HOST: " + host
+                + ", LOGIN: " + login
+                + ", PASSWORD: " + password);
+
+
+
         Locale.setDefault(Locale.US);
         Configuration configuration = new Configuration();
         configuration.addAnnotatedClass(Country.class);
