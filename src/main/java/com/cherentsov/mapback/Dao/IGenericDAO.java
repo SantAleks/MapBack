@@ -1,12 +1,18 @@
 package com.cherentsov.mapback.Dao;
 
-public interface IGenericDAO<T> {
-    public Long create(final T newInstance);
+import java.util.List;
 
-    public T read(final Long identifier, Class<?> persistClass);
+public interface IGenericDAO {
+    <T> Long create(final T newInstance);
 
-    public void update(final T transientInstance);
+    <T> T read(Class<T> persistClass, final Long identifier);
 
-    public void delete(final T persistentInstance);
+    <T> void update(final T transientInstance);
+
+    <T> void delete(final T persistentInstance);
+
+    <T> List<T> findByName(final Class<T> persistClass, final String name);
+
+    <T> List<T> getAll(final Class<T> persistClass);
 }
 

@@ -14,9 +14,11 @@ public class MapbackApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(MapbackApplication.class, args);
-        System.out.println("fdgfg");
-        DBService dbService = new DBService();
-        ExampleData.AddExampleToDB(dbService);
+        System.out.println("Start Aplication");
+        //DBService dbService = new DBService();
+        ExampleData.AddExampleToDB();
+        System.out.println("DB is Full");
+
     }
 }
 

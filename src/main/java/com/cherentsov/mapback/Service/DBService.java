@@ -11,10 +11,22 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
 
+import java.util.List;
 import java.util.Locale;
 
 public class DBService implements IDBService {
-    private final SessionFactory sessionFactory;
+    private static SessionFactory sessionFactory;
+
+    private static DBService instance;
+
+    public static synchronized DBService getInstance() {
+        if (instance == null) {
+            instance = new DBService();
+            Configuration configuration = getOracleConfiguration();
+            sessionFactory = createSessionFactory(configuration);
+        }
+        return instance;
+    }
 
     /*private DBConfig dBConfig;
 
@@ -22,17 +34,17 @@ public class DBService implements IDBService {
         this.dBConfig = dbConfig;
     }*/
 
-    public DBService() {
-        Configuration configuration = getOracleConfiguration();
-        sessionFactory = createSessionFactory(configuration);
-    }
-
+    /*   public DBService() {
+           Configuration configuration = getOracleConfiguration();
+           sessionFactory = createSessionFactory(configuration);
+       }
+   */
     @Override
     public void Close() {
         sessionFactory.close();
     }
 
-    private Configuration getOracleConfiguration() {
+    private static Configuration getOracleConfiguration() {
         System.out.println(DBConfig.getInstance().toString());
         //DBConfig dBConfig = new DBConfig();
         //System.out.println(" Dialect: "+ dBConfig.getInstance().getDialect() + "Dialect: "+ dBConfig.getInstance().getDriver_class()
@@ -87,27 +99,28 @@ public class DBService implements IDBService {
         ServiceRegistry serviceRegistry = builder.build();
         return configuration.buildSessionFactory(serviceRegistry);
     }
-/*
-    public long addCountry(Country country) throws HibernateException {
-        try {
-            Session session = sessionFactory.openSession();
-            Transaction transaction = session.beginTransaction();
-            IGenericDAO dao = new GenericDAO(session);
-            Long id = dao.create(country);
-            transaction.commit();
-            session.close();
-            return id;
-        } catch (HibernateException e) {
-            throw new HibernateException(e);
+
+    /*
+        public long addCountry(Country country) throws HibernateException {
+            try {
+                Session session = sessionFactory.openSession();
+                Transaction transaction = session.beginTransaction();
+                IGenericDAO dao = new GenericDAO(session);
+                Long id = dao.create(country);
+                transaction.commit();
+                session.close();
+                return id;
+            } catch (HibernateException e) {
+                throw new HibernateException(e);
+            }
         }
-    }
-*/
+    */
     @Override
     public <T> Long create(T entity) throws HibernateException {
         try {
             Session session = sessionFactory.openSession();
             Transaction transaction = session.beginTransaction();
-            IGenericDAO<T> dao = new GenericDAO<>(session);
+            IGenericDAO dao = new GenericDAO(session);
             Long id = dao.create(entity);
             transaction.commit();
             session.close();
@@ -117,4 +130,46 @@ public class DBService implements IDBService {
         }
     }
 
+    @Override
+    public <T> T read(Class<T> persistClass, Long id) throws HibernateException {
+        try {
+            Session session = sessionFactory.openSession();
+            Transaction transaction = session.beginTransaction();
+            IGenericDAO dao = new GenericDAO(session);
+            T result = dao.read(persistClass, id);
+            transaction.commit();
+            session.close();
+            return result;
+        } catch (HibernateException e) {
+            throw new HibernateException(e);
+        }
+    }
+
+    public <T> List<T> getAll(Class<T> persistClass) throws HibernateException {
+        try {
+            Session session = sessionFactory.openSession();
+            Transaction transaction = session.beginTransaction();
+            IGenericDAO dao = new GenericDAO(session);
+            List<T> result = dao.getAll(persistClass);
+            transaction.commit();
+            session.close();
+            return result;
+        } catch (HibernateException e) {
+            throw new HibernateException(e);
+        }
+    }
+
+    public <T> List<T> findByName(Class<T> persistClass, String name) throws HibernateException {
+        try {
+            Session session = sessionFactory.openSession();
+            Transaction transaction = session.beginTransaction();
+            IGenericDAO dao = new GenericDAO(session);
+            List<T> result = dao.findByName(persistClass, name);
+            transaction.commit();
+            session.close();
+            return result;
+        } catch (HibernateException e) {
+            throw new HibernateException(e);
+        }
+    }
 }
