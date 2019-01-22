@@ -1,26 +1,22 @@
 package com.cherentsov.mapback.Controller;
 
-import com.cherentsov.mapback.Model.Bank;
-import com.cherentsov.mapback.Model.City;
-import com.cherentsov.mapback.Model.Country;
-import com.cherentsov.mapback.Model.Point;
+import com.cherentsov.mapback.Model.*;
 import com.cherentsov.mapback.Service.DBService;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 @RestController
 public class WebController {
 
-    //private static final String template = "Hello, %s!";
-    //private final AtomicLong counter = new AtomicLong();
-
-    @RequestMapping(value = "/map", method = RequestMethod.GET)
-    public String map(@RequestParam(value="co", required=false, defaultValue="") String countryPattern,
+    @RequestMapping(value = "/map", method = RequestMethod.GET, produces = { "application/json" })
+    public Set<Object> map(@RequestParam(value="co", required=false, defaultValue="") String countryPattern,
                       @RequestParam(value="ci", required=false, defaultValue="") String cityPattern,
                       @RequestParam(value="ba", required=false, defaultValue="") String bankPattern,
                       @RequestParam(value="fc", required=false, defaultValue="") String focus) {
@@ -30,35 +26,54 @@ public class WebController {
         if (countryPattern.trim().length() > 0){
             lCountry = dBService.findByName(Country.class, countryPattern.trim());
         }
-//        System.out.println("lCountry " + lCountry);
 
         List<City> lCity = new ArrayList<>();
         if (cityPattern.trim().length() > 0){ // && lCountry.size() != 1){
             lCity = dBService.findByName(City.class, cityPattern.trim());
         }
-        System.out.println("lCity " + lCity);
 
         List<Bank> lBank = new ArrayList<>();
         if (bankPattern.trim().length() > 0){
             lBank = dBService.findByName(Bank.class, bankPattern.trim());
         }
-        System.out.println("lBank " + lBank);
 
-      /*  List<Point> lPoint = new ArrayList<>();
+        List<Point> lPoint = new ArrayList<>();
         if (lCountry.size() == 1 || lCity.size() == 1 || lBank.size() == 1){
-            lPoint = dBService.findByName(Point.class, bankPattern.strip());
+            lPoint = dBService.findPointByFK(lCountry, lCity, lBank);
         }
-        System.out.println("lBank " + lBank);
-        */
 
-        //City result = dBService.read(City.class, (long) 1);
-        //return new String("Город: "+ result.getName());
+        String[] mCountry = new String[lCountry.size()];
+        for (int i = 0; i < lCountry.size(); i++) {
+            mCountry[i] = lCountry.get(i).getName();
+        }
 
-        //List<City> result = dBService.getAll(City.class);
+        String[] mCity = new String[lCity.size()];
+        for (int i = 0; i < lCity.size(); i++) {
+            mCity[i] = lCity.get(i).getName();
+        }
 
-        List<City> result = dBService.findByName(City.class, "С");
+        String[] mBank = new String[lBank.size()];
+        for (int i = 0; i < lBank.size(); i++) {
+            mBank[i] = lBank.get(i).getName();
+        }
 
-        return "Город: "+ result;
+        String[][] mPoint = new String[lPoint.size()][6];
+        for (int i = 0; i < lPoint.size(); i++) {
+            mPoint[i][0] = lPoint.get(i).getAddress();
+            mPoint[i][1] = lPoint.get(i).getCity().getCountry().getName();
+            mPoint[i][2] = lPoint.get(i).getCity().getName();
+            mPoint[i][3] = lPoint.get(i).getBank().getName();
+            mPoint[i][4] = lPoint.get(i).getfX().toString();
+            mPoint[i][5] = lPoint.get(i).getfY().toString();
+        }
+
+        Set<Object> result = new LinkedHashSet<Object>();
+        result.add(mCountry);
+        result.add(mCity);
+        result.add(mBank);
+        result.add(mPoint);
+        //String json = new Gson().toJson(qqq);
+        return result;
     }
     @RequestMapping("/")
     public String index(@RequestParam(value="name", required=false, defaultValue="World") String name) {

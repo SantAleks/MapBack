@@ -1,12 +1,9 @@
 package com.cherentsov.mapback.Dao;
 
-import com.cherentsov.mapback.Model.City;
+import com.cherentsov.mapback.Model.*;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
-import org.hibernate.criterion.Restrictions;
 import org.hibernate.query.Query;
-
-import java.util.ArrayList;
 import java.util.List;
 
 public class GenericDAO implements IGenericDAO {
@@ -34,39 +31,38 @@ public class GenericDAO implements IGenericDAO {
 
     @Override
     public <T> T read(Class<T> persistClass, Long identifier) throws HibernateException {
-        return (T) session.get(persistClass, identifier);
+        return session.get(persistClass, identifier);
     }
     @Override
     public <T> List<T> findByName(final Class<T> persistClass, String name) {
         Query<T> query = session.createQuery("from " + persistClass.getSimpleName() +
-                        " where lower(name) like :parName", persistClass);
-
+                        " where lower(name) like :parName ORDER BY name", persistClass);
         query.setParameter("parName", "%" + name.toLowerCase() + "%");
-        List<T> modelList = query.list();
-
-        //Заставим Hibernate прочитать связанные таблицы по Foreign Key'ям выборки
-        String model = null;
-        for (T m : modelList){
-            model = m.toString();
-            //System.out.println(m.toString());
-        }
-        //List<T> = ArrayList<T>(modelList);
-        return modelList;
+        return query.list();
     }
 
     public <T> List<T> getAll(final Class<T> persistClass) {
-        //System.out.println("Name: " + persistClass.getSimpleName());
-        //Query<T> query = session.createQuery("FROM " + persistClass.getSimpleName(), persistClass);
-        //return query.list();
-        Query<T> query = session.createQuery("from " + persistClass.getSimpleName(), persistClass);
-        List<T> modelList = query.list();
-        //Заставим Hibernate прочитать связанные таблицы по Foreign Key'ям выборки
-        String model = null;
-        for (T m : modelList){
-            model = m.toString();
-            //System.out.println(m.toString());
+        Query<T> query = session.createQuery("from " + persistClass.getSimpleName() + " ORDER BY name", persistClass);
+        return query.list();
+    }
+
+    @Override
+    public List<Point> findPointByFK(List<Country> lCountry, List<City> lCity, List<Bank> lBank) {
+        String qS = "select pt from Point as pt";
+
+        //Если задана только страна, но не задан город, отдадим все пункты в стране
+        if (lCountry.size() == 1 && lCity.size() != 1){
+            qS = qS + " join pt.city as cit with cit.country.id = " + lCountry.get(0).getId();
         }
-        //List<T> = ArrayList<T>(modelList);
-        return modelList;
+        if (lBank.size() == 1){
+            qS = qS + " where pt.bank.id = " + lBank.get(0).getId();
+        }
+        if (lCity.size() == 1){
+            qS = qS + (lBank.size() != 1?" where ":" and ");
+            qS = qS + "city.id = " + lCity.get(0).getId();
+        }
+        qS = qS + " ORDER BY pt.address";
+        Query<Point> query = session.createQuery(qS , Point.class).setMaxResults(200);
+        return query.list();
     }
 }

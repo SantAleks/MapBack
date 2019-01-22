@@ -17,7 +17,7 @@ public class Bank implements Serializable {
 
     @Column(name="name", length = 50, nullable = false)
     private String name;
-
+/*
     @OneToMany(
         mappedBy = "bank",
         cascade = CascadeType.ALL,
@@ -25,7 +25,7 @@ public class Bank implements Serializable {
         orphanRemoval = true
     )
     private Set<Point> pointSet = new HashSet<Point>();
-
+*/
     public Bank() {
     }
 
@@ -49,7 +49,7 @@ public class Bank implements Serializable {
     public void setName(String name) {
         this.name = name;
     }
-
+/*
     public Set<Point> getPointSet() {
         return pointSet;
     }
@@ -57,7 +57,7 @@ public class Bank implements Serializable {
     public void setPointSet(Set<Point> pointSet) {
         this.pointSet = pointSet;
     }
-
+*/
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

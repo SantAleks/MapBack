@@ -17,7 +17,7 @@ public class Country implements Serializable {
 
     @Column(name="name", length = 50, nullable = false)
     private String name;
-
+/*
     @OneToMany(
             mappedBy = "country",
             cascade = CascadeType.ALL,
@@ -25,7 +25,7 @@ public class Country implements Serializable {
             orphanRemoval = true
     )
     private Set<City> citySet = new HashSet<City>();
-
+*/
     public Country() {
     }
 
@@ -49,7 +49,7 @@ public class Country implements Serializable {
     public void setName(String name) {
         this.name = name;
     }
-
+/*
     public Set<City> getCitySet() {
         return citySet;
     }
@@ -57,7 +57,7 @@ public class Country implements Serializable {
     public void setCitySet(Set<City> citySet) {
         this.citySet = citySet;
     }
-
+*/
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

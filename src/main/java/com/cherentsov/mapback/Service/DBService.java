@@ -28,24 +28,13 @@ public class DBService implements IDBService {
         return instance;
     }
 
-    /*private DBConfig dBConfig;
-
-    public void setDbConfig(DBConfig dbConfig) {
-        this.dBConfig = dbConfig;
-    }*/
-
-    /*   public DBService() {
-           Configuration configuration = getOracleConfiguration();
-           sessionFactory = createSessionFactory(configuration);
-       }
-   */
     @Override
     public void Close() {
         sessionFactory.close();
     }
 
     private static Configuration getOracleConfiguration() {
-        System.out.println(DBConfig.getInstance().toString());
+        //System.out.println(DBConfig.getInstance().toString());
         //DBConfig dBConfig = new DBConfig();
         //System.out.println(" Dialect: "+ dBConfig.getInstance().getDialect() + "Dialect: "+ dBConfig.getInstance().getDriver_class()
         //        + "Dialect: "+ dBConfig.getInstance().getHbm2ddl() + "Dialect: "+ dBConfig.getInstance().getPassword()+"Dialect: "+
@@ -89,7 +78,6 @@ public class DBService implements IDBService {
         configuration.setProperty("hibernate.connection.password", DBConfig.getInstance().getPassword());
         configuration.setProperty("hibernate.show_sql", DBConfig.getInstance().getShow_sql());
         configuration.setProperty("hibernate.hbm2ddl.auto", DBConfig.getInstance().getHbm2ddl());
-        //configuration.setProperty("NLS_LANG", "AMERICAN");
         return configuration;
     }
 
@@ -100,21 +88,6 @@ public class DBService implements IDBService {
         return configuration.buildSessionFactory(serviceRegistry);
     }
 
-    /*
-        public long addCountry(Country country) throws HibernateException {
-            try {
-                Session session = sessionFactory.openSession();
-                Transaction transaction = session.beginTransaction();
-                IGenericDAO dao = new GenericDAO(session);
-                Long id = dao.create(country);
-                transaction.commit();
-                session.close();
-                return id;
-            } catch (HibernateException e) {
-                throw new HibernateException(e);
-            }
-        }
-    */
     @Override
     public <T> Long create(T entity) throws HibernateException {
         try {
@@ -148,6 +121,14 @@ public class DBService implements IDBService {
     public <T> List<T> getAll(Class<T> persistClass) throws HibernateException {
         try {
             Session session = sessionFactory.openSession();
+            if (persistClass == City.class){
+                session.enableFetchProfile("city-with-country");
+            }
+            if (persistClass == Point.class){
+                session.enableFetchProfile("point-with-bank");
+                session.enableFetchProfile("point-with-city");
+                session.enableFetchProfile("city-with-country");
+            }
             Transaction transaction = session.beginTransaction();
             IGenericDAO dao = new GenericDAO(session);
             List<T> result = dao.getAll(persistClass);
@@ -162,9 +143,30 @@ public class DBService implements IDBService {
     public <T> List<T> findByName(Class<T> persistClass, String name) throws HibernateException {
         try {
             Session session = sessionFactory.openSession();
+            if (persistClass == City.class){
+                session.enableFetchProfile("city-with-country");
+            }
             Transaction transaction = session.beginTransaction();
             IGenericDAO dao = new GenericDAO(session);
             List<T> result = dao.findByName(persistClass, name);
+            transaction.commit();
+            session.close();
+            return result;
+        } catch (HibernateException e) {
+            throw new HibernateException(e);
+        }
+    }
+
+    @Override
+    public List<Point> findPointByFK(List<Country> lCountry, List<City> lCity, List<Bank> lBank) {
+        try {
+            Session session = sessionFactory.openSession();
+            session.enableFetchProfile("point-with-bank");
+            session.enableFetchProfile("point-with-city");
+            session.enableFetchProfile("city-with-country");
+            Transaction transaction = session.beginTransaction();
+            IGenericDAO dao = new GenericDAO(session);
+            List<Point> result = dao.findPointByFK(lCountry, lCity, lBank);
             transaction.commit();
             session.close();
             return result;

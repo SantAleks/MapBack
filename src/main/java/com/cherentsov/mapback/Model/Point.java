@@ -1,9 +1,17 @@
 package com.cherentsov.mapback.Model;
 
+import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.FetchProfile;
+import org.hibernate.annotations.FetchProfiles;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
 
+@FetchProfiles({
+        @FetchProfile(fetchOverrides = { @FetchProfile.FetchOverride(association = "city", entity = Point.class, mode = FetchMode.JOIN) }, name = "point-with-city"),
+        @FetchProfile(fetchOverrides = { @FetchProfile.FetchOverride(association = "bank", entity = Point.class, mode = FetchMode.JOIN) }, name = "point-with-bank")
+})
 @Entity
 @Table(name="point")
 public class Point implements Serializable {

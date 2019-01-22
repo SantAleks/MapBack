@@ -1,11 +1,18 @@
 package com.cherentsov.mapback.Model;
 
+import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.FetchProfile;
+import org.hibernate.annotations.FetchProfiles;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+@FetchProfiles({
+        @FetchProfile(fetchOverrides = { @FetchProfile.FetchOverride(association = "country", entity = City.class, mode = FetchMode.JOIN) }, name = "city-with-country")
+})
 @Entity
 @Table(name="city")
 public class City implements Serializable {
@@ -21,7 +28,7 @@ public class City implements Serializable {
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="country_fk", nullable = false)
     private Country country;
-
+/*
     @OneToMany(
         mappedBy = "city",
         cascade = CascadeType.ALL,
@@ -29,7 +36,7 @@ public class City implements Serializable {
         orphanRemoval = true
     )
     private Set<Point> pointSet = new HashSet<Point>();
-
+*/
     public City(){}
 
     public City(Long id, String name, Country country){
@@ -60,7 +67,7 @@ public class City implements Serializable {
     public void setCountry(Country country) {
         this.country = country;
     }
-
+/*
     public Set<Point> getPointSet() {
         return pointSet;
     }
@@ -68,7 +75,7 @@ public class City implements Serializable {
     public void setPointSet(Set<Point> pointSet) {
         this.pointSet = pointSet;
     }
-
+*/
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

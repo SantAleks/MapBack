@@ -1,5 +1,7 @@
 package com.cherentsov.mapback.Dao;
 
+import com.cherentsov.mapback.Model.*;
+
 import java.util.List;
 
 public interface IGenericDAO {
@@ -14,5 +16,7 @@ public interface IGenericDAO {
     <T> List<T> findByName(final Class<T> persistClass, final String name);
 
     <T> List<T> getAll(final Class<T> persistClass);
+
+    List<Point> findPointByFK(final List<Country> lCountry, final List<City> lCity, final List<Bank> lBank);
 }
 
