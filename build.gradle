@@ -26,21 +26,44 @@ repositories {
 }
 
 dependencies {
+    //compile files('lib/ojdbc6')
+    compile ("com.oracle:ojdbc6:11.2.0.4.0")
+
     //implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    compile group: 'javax.xml.bind', name: 'jaxb-api', version: '2.2.11'
+    // https://mvnrepository.com/artifact/com.sun.xml.bind/jaxb-core
+    //compile group: 'com.sun.xml.bind', name: 'jaxb-core', version: '2.2.11'
+    // https://mvnrepository.com/artifact/com.sun.xml.bind/jaxb-impl
+    //compile group: 'com.sun.xml.bind', name: 'jaxb-impl', version: '2.2.11'
+    // https://mvnrepository.com/artifact/javax.activation/activation
+    compile group: 'javax.activation', name: 'activation', version: '1.1.1'
+
     implementation 'org.springframework.boot:spring-boot-starter-web'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    compile group: 'org.hibernate', name: 'hibernate-core', version: '5.4.0.Final'
+    //compile group: 'org.hibernate', name: 'hibernate-core', version: '5.4.0.Final'
+    // https://mvnrepository.com/artifact/org.hibernate/hibernate-core
+    compile group: 'org.hibernate', name: 'hibernate-core', version: '5.3.7.Final'
     // https://mvnrepository.com/artifact/com.google.code.gson/gson
     compile group: 'com.google.code.gson', name: 'gson', version: '2.8.5'
+    // https://mvnrepository.com/artifact/com.oracle/ojdbc6
+    //testCompile group: 'com.oracle', name: 'ojdbc6', version: '12.1.0.1-atlassian-hosted'
+
+// https://mvnrepository.com/artifact/OJDBC/ojdbc
+ //   compile group: 'OJDBC', name: 'ojdbc', version: '14'
+
+    // https://mvnrepository.com/artifact/com.oracle/ojdbc
+    //compile group: 'com.oracle', name: 'ojdbc', version: '6'
+    //compile files('libs/ojdbc6')
     //runtime files('lib/ojdbc6.jar')
-    //Compile('libs/OJDBC-Full_11g_r2')
+    //Compile('../Lib/OJDBC-Full_11g_r2/ojdbc6.jar')
     //testCompile("org.junit.jupiter:junit-jupiter-api:5.0.0-M3")
     //testCompile("org.junit.platform:junit-platform-runner:1.0.0-M4")
     //testCompile group: 'org.springframework.boot', name: 'spring-boot-test', version: '2.1.2.RELEASE'
     //testCompile group: 'org.springframework', name: 'spring-test', version: '2.5'
     // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-test
     //testCompile 'org.springframework.boot:spring-boot-starter-test'
-}    
+    // https://mvnrepository.com/artifact/javax.xml.bind/jaxb-api
+}
 jar {
     baseName = 'gs-gradle'
     version =  '0.1.0'

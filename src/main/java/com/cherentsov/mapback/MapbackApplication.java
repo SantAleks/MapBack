@@ -16,6 +16,7 @@ public class MapbackApplication {
         SpringApplication.run(MapbackApplication.class, args);
         System.out.println("Start Aplication");
         //DBService dbService = new DBService();
+        System.out.println("DB is Empty");
         ExampleData.AddExampleToDB();
         System.out.println("DB is Full");
 

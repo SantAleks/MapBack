@@ -61,7 +61,7 @@ public class GenericDAO implements IGenericDAO {
             qS = qS + (lBank.size() != 1?" where ":" and ");
             qS = qS + "city.id = " + lCity.get(0).getId();
         }
-        qS = qS + " ORDER BY pt.address";
+        qS = qS + " ORDER BY pt.bank, pt.address";
         Query<Point> query = session.createQuery(qS , Point.class).setMaxResults(200);
         return query.list();
     }

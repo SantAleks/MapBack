@@ -24,6 +24,7 @@ public class DBService implements IDBService {
             instance = new DBService();
             Configuration configuration = getOracleConfiguration();
             sessionFactory = createSessionFactory(configuration);
+            System.out.println("2______");
         }
         return instance;
     }
@@ -34,7 +35,7 @@ public class DBService implements IDBService {
     }
 
     private static Configuration getOracleConfiguration() {
-        //System.out.println(DBConfig.getInstance().toString());
+        System.out.println(DBConfig.getInstance().toString());
         //DBConfig dBConfig = new DBConfig();
         //System.out.println(" Dialect: "+ dBConfig.getInstance().getDialect() + "Dialect: "+ dBConfig.getInstance().getDriver_class()
         //        + "Dialect: "+ dBConfig.getInstance().getHbm2ddl() + "Dialect: "+ dBConfig.getInstance().getPassword()+"Dialect: "+
@@ -85,6 +86,7 @@ public class DBService implements IDBService {
         StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder();
         builder.applySettings(configuration.getProperties());
         ServiceRegistry serviceRegistry = builder.build();
+        System.out.println("3______");
         return configuration.buildSessionFactory(serviceRegistry);
     }
 
