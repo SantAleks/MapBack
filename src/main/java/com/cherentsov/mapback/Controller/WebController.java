@@ -6,11 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 import java.util.*;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 @RestController
 public class WebController {
@@ -72,7 +68,6 @@ public class WebController {
         result.add(mCity);
         result.add(mBank);
         result.add(mPoint);
-        //String json = new Gson().toJson(qqq);
         return result;
     }
     @RequestMapping("/")

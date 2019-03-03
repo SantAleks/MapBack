@@ -10,13 +10,15 @@ import org.hibernate.Transaction;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import java.util.List;
 import java.util.Locale;
 
 public class DBService implements IDBService {
     private static SessionFactory sessionFactory;
-
+    private static final Log logger = LogFactory.getLog(DBService.class);
     private static DBService instance;
 
     public static synchronized DBService getInstance() {
@@ -24,7 +26,6 @@ public class DBService implements IDBService {
             instance = new DBService();
             Configuration configuration = getOracleConfiguration();
             sessionFactory = createSessionFactory(configuration);
-            System.out.println("2______");
         }
         return instance;
     }
@@ -35,35 +36,7 @@ public class DBService implements IDBService {
     }
 
     private static Configuration getOracleConfiguration() {
-        System.out.println(DBConfig.getInstance().toString());
-        //DBConfig dBConfig = new DBConfig();
-        //System.out.println(" Dialect: "+ dBConfig.getInstance().getDialect() + "Dialect: "+ dBConfig.getInstance().getDriver_class()
-        //        + "Dialect: "+ dBConfig.getInstance().getHbm2ddl() + "Dialect: "+ dBConfig.getInstance().getPassword()+"Dialect: "+
-        //        dBConfig.getInstance().getShow_sql()+"Dialect: "+ dBConfig.getInstance().getUrl()+"Dialect: "+ dBConfig.getInstance().getUsername());
-
-        /*
-        FileInputStream fis;
-        Properties property = new Properties();
-
-        String host = "";
-        String login = "";
-        String password = "";
-        try {
-            fis = new FileInputStream("G:\\java\\MapBack\\src\\main\\resources\\application.properties");
-            property.load(fis);
-            host = property.getProperty("db.host");
-            login = property.getProperty("hibernate.connection.username");
-            password = property.getProperty("hibernate.connection.password");
-
-        } catch (IOException e) {
-            System.err.println("ОШИБКА: Файл свойств отсуствует!");
-        }
-
-        System.out.println("HOST: " + host
-                + ", LOGIN: " + login
-                + ", PASSWORD: " + password);
-
-*/
+        logger.info("Конфиг соединения с БД: " + DBConfig.getInstance().toString());
 
         Locale.setDefault(Locale.US);
         Configuration configuration = new Configuration();
@@ -86,7 +59,6 @@ public class DBService implements IDBService {
         StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder();
         builder.applySettings(configuration.getProperties());
         ServiceRegistry serviceRegistry = builder.build();
-        System.out.println("3______");
         return configuration.buildSessionFactory(serviceRegistry);
     }
 

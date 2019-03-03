@@ -45,7 +45,6 @@ class ExampleData {
         Point Lenina = new Point((long) -1,"ул. Ленина, 136",53.025737F, 27.550855F, Sluck, SberBank);
         Point Lenina195 = new Point((long) -1,"ул. Ленина, 195А",53.028795F, 27.554158F, Sluck, VTB);
         DBService dBService = DBService.getInstance();
-        System.out.println("2______");
         try {
             //Страны
             RF.setId(dBService.create(RF));

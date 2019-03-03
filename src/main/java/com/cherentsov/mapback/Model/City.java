@@ -6,9 +6,7 @@ import org.hibernate.annotations.FetchProfiles;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.HashSet;
 import java.util.Objects;
-import java.util.Set;
 
 @FetchProfiles({
         @FetchProfile(fetchOverrides = { @FetchProfile.FetchOverride(association = "country", entity = City.class, mode = FetchMode.JOIN) }, name = "city-with-country")
