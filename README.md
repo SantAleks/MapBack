@@ -32,4 +32,4 @@ Web-приложение:
 3) подсказки для поля "Банк" удовлетворяющие переданному фильтру;
 4) найденные банковские пункты, удовлетворяющие каждому из фильтров (страна, город, банк).
 
-<img src="https://img.fonwall.ru/o/1/peyzaj-goryi-zakat-peyzaji.jpg" alt="снимок экрана с JSON-ответом">
+<img src="https://github.com/SantAleks/MapBack/blob/master/distr/JSON_Resp.JPG" alt="снимок экрана с JSON-ответом">
