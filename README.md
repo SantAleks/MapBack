@@ -37,7 +37,7 @@ Web-приложение:
 
 Архив с дистрибутивом находится по адресу https://github.com/SantAleks/MapBack/blob/master/distr/mapback.zip
 Для запуска необходимо:
-1) распакавать архив;
+1) распаковать архив;
 2) внутри полученной папки в файле application.properties задать параметры подключения к БД ORACLE (url, username, password) и порт на котором должен принимать запросы сервис (server.port);
 3) запустить сервис файлом mapback.bat.
 
