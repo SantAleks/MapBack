@@ -2,6 +2,8 @@ package com.cherentsov.mapback.Controller;
 
 import com.cherentsov.mapback.Model.*;
 import com.cherentsov.mapback.Service.DBService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -11,12 +13,19 @@ import java.util.*;
 @RestController
 public class WebController {
 
+    @Bean
+    public DBService dBServiceBean() {
+        return DBService.getInstance();
+    }
+
+    @Autowired
+    DBService dBService;
+
     @RequestMapping(value = "/map", method = RequestMethod.GET, produces = { "application/json" })
     public Set<Object> map(@RequestParam(value="co", required=false, defaultValue="") String countryPattern,
                       @RequestParam(value="ci", required=false, defaultValue="") String cityPattern,
                       @RequestParam(value="ba", required=false, defaultValue="") String bankPattern,
                       @RequestParam(value="fc", required=false, defaultValue="") String focus) {
-        DBService dBService = DBService.getInstance();
 
         List<Country> lCountry = new ArrayList<>();
         if (countryPattern.trim().length() > 0){
